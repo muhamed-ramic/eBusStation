@@ -1,0 +1,74 @@
+﻿@model LoginIndexViewModel
+@{ 
+    object ErrorMessage = TempData["error_poruka"];
+}
+<div class="container"id="ajax2" style="margin-top:5%;">
+    <div class="row">
+        <div class="col-md-5 col-md-offset-3" style="background-color:steelblue;border:1px solid black"> 
+            <h3 class="text-center" >Login at our web app</h3>
+            <form id="forma2" asp-controller="Login" asp-action="Index">
+                <div id="msg"><ul style="color:red;">@ErrorMessage</ul></div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input class="form-control" asp-for="username" placeholder="Username" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input class="form-control" type="password" asp-for="password" placeholder="Password" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        @Html.CheckBoxFor(x => x.Remember) @Html.LabelFor(x => x.Remember)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-center">
+                        <input class="btn btn-info" type="submit" value="Login" />
+                    </div>
+                </div>
+            </form>
+        </div> 
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        var forma = $("#forma2");
+        var msg = $("#msg");
+        var ul = msg.find("ul");
+        forma.submit(function (event) {
+            event.preventDefault();
+            if (ul.html() != "")
+                ul.html("<br/>");
+            var datax = forma.serialize();
+            $.ajax({
+                type: "post",
+                url: "/Login/Index",
+                data: datax,
+                success: function (result) {
+                    result = $(result).text();
+                    if (result == "failure") {
+                        msg.find("ul").html("Korisničko ime ili lozinka nisu ispravni.");
+                        msg.show();
+                    }   
+                    else if (result == "Verifikacija") {
+                        window.location.href = "/Login/VerifikacijaStatusa";
+                    }
+                    else
+                        window.location.href = "/Home/Index";
+                }
+                
+
+
+            });
+           
+
+        });
+    });
+
+</script>

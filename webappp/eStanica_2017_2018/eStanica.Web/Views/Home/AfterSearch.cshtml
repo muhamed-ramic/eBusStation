@@ -1,0 +1,56 @@
+﻿@model  HomeSearchVM
+@{
+    ViewData["Title"] = "After search";
+}
+<style>
+    body{
+        overflow-y:scroll;
+    }
+</style>
+
+<h2 class="bijelo">Poslije pretrazivanja</h2>
+@if (Model.Lokacije.Any())
+{
+
+<table class="table table-active table-condensed" style="color:lightblue;border:3px dashed lightblue;background-color:steelblue">
+    <thead>
+        <tr>
+            <th>Pocetna stanica</th>
+            <th>Vrijeme polaska sa stanice -h</th>
+            <th>Prevoznik</th>
+            <th>Cijena u KM</th>
+            <th>Dolazna stanica</th>
+            <th>Vrijeme dolaska na stanicu - h</th>
+            <th>Odaberi ponudu</th>
+        </tr>
+    </thead>
+   <tbody>
+       @for (int i = 0; i < Model.Lokacije.Count; i++)
+       {
+       <tr>
+           <td>@Model.Lokacije[i].Linije.Polazak.Naziv</td>
+           <td>@Model.Lokacije[i].Linije.vrijemePolaska</td>
+           <td>@Model.Lokacije[i].Linije.Prevoznik.Naziv</td>
+          
+           <td>@Model.Lokacije[i].cijenaOdPolaska - KM</td>
+           <td>@Model.Lokacije[i].Grad.Naziv</td>
+           <td>@Model.Lokacije[i].vrijemeDolaska h</td>
+         <td><a class="btn btn-info" asp-area="KorisnikModul" asp-action="Index" asp-controller="Rezervacije" asp-route-PonudId="@Model.Lokacije[i].Id"><i class="fa fa-money-bill" style="font-size:24px"></i>Odaberi ponudu</a></td>
+       </tr>
+       }
+   </tbody>
+</table>
+}
+else
+{
+    <h3 class="bijelo">Nazalost.. nismo uspijeli nista pronaci sa vasim podacima. Pokusajte promjeniti podatke..</h3>
+}
+<script> 
+    $(document).ready(function () {
+        $("#prevozniciAjax").hide();
+        $("#prevozniciMain").hide();
+        $("#LinijeMain").hide();
+        $("#linijeAjax").hide();
+        $("#myFooter").hide();
+    });
+</script>

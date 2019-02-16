@@ -1,0 +1,86 @@
+﻿@model List<RezervacijeVratiRezervacijeKorisnikaVM>
+@{
+    ViewData["Title"] = "Moje rezervacije - recenzija";
+    int counter = 1;
+    DateTime danasnji = DateTime.Now;
+}
+<br />
+<script src="~/lib/jquery/toastr.min.js"></script>
+<link rel="stylesheet" href="~/lib/jquery/toastr.min.css" />
+<div id="ajaxRezervacije">
+    <div>
+        <div class="row bijelo">
+            <div class="col-md-4 col-md-offset-1">
+                @foreach (var item in Model)
+                {
+                    <div class="RezervacijskiDiv" id="@counter">
+                        <h3>@(counter++) .</h3>
+                        <h4>Datum putovanja:: @item.DatumPutovanja u :: @item.Polazak - sati</h4>
+
+                        @if (danasnji > item.DatumKupovine && item.PostojiVecRecenzija==false)
+                        {
+                       <div style="float:right">
+                            <button class="btn btn-outline-success" onclick="Ocijeni(@item.TransakcijaId)">Ocijeni putovanje</button>
+                        </div>
+                        }
+                        @if (item.PostojiVecRecenzija)
+                        {
+                            <div style="float:right" id="toHim">
+                                <a  onclick="PrikazRecenzije(@item.RecenzijaId)"><i class="fa fa-flag-checkered" style="font-size:24px"></i>Pogledaj vec recenziju</a>
+                            </div>
+                        }
+                        <h4>Aktivna rezervacija:: @(item.Aktivna == false ? "DA" : "NE")</h4>
+                        <h4>Vi putujete na relaciji:: @item.PonudaKupljena</h4>
+                        <h4>Platili ste:: @item.Potroseno KM</h4>
+                        <h4>Kupili ste karata:: @item.Kolicina</h4>
+                    </div>
+
+                    <div>-----------------------------------------------</div>
+                }
+            </div>
+            <div class="col-md-4 col-md-offset-1" id="ocjeneDiv" style="display:none">
+                <h1>Ocjene</h1>
+            </div>
+            <div class="col-md-4 col-md-offset-0" id="recenzijaDiv" >
+                </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#myFooter").hide();
+        $("#prevozniciAjax").hide();
+        $("#prevozniciMain").hide();
+        $("#LinijeMain").hide();
+        $("#linijeAjax").hide();
+    });
+    function PrikazRecenzije(RecenzijaId) {
+        //Scroll to speficic div
+        $("html, body").delay(2000).animate({
+            scrollTop: $(window).scrollTop($('#toHim').offset().top)
+        }, 2000);
+
+        $.ajax({
+            type: "get",
+            url: "/KorisnikModul/Recenzije/Index?RecenzijaId="+ RecenzijaId,
+            success: function (data) {
+                $("#recenzijaDiv").html(data);
+            }
+        });
+    }
+
+    function Ocijeni(transakcijaId) {
+        $("html, body").delay(2000).animate({
+            scrollTop: $(window).scrollTop($('#toHim').offset().top)
+        }, 2000);
+        $.ajax({
+            type: "get",
+            url: "/KorisnikModul/Recenzije/FormaZaOcjenu?transakcijaId=" + transakcijaId,
+            success: function (data) {
+                $("#ocjeneDiv").html(data);
+                $("#ocjeneDiv").show();
+            }
+        });
+    }
+   
+</script>

@@ -1,0 +1,34 @@
+﻿@model List<HomeTravelsPrevozniciVM>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Prolazi kroz</th>
+            <th>Cijena</th>
+            <th>Vrijeme dolaska na stanicu</th>
+            <th>Odaberi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        {
+            @foreach (var y in x.podaci)
+            {
+                @foreach (var z in y.ListaGradova)
+                {
+                    <tr>
+                        <td>@z.Naziv</td>
+                        <td>@z.Cijena KM</td>
+                        <td>@z.VrijemeDolsaska h</td>
+                        <td>
+                            <a class="btn btn-success" asp-area="KorisnikModul" asp-action="Index" asp-controller="Rezervacije" asp-route-PonudId="@z.PosjecujeLokacijeId"asp-route-tipKarte="@z.TipKarte">
+                                <i class="fa fa-money" style="font-size:24px;"></i>
+                                Odaberi ponudu
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>

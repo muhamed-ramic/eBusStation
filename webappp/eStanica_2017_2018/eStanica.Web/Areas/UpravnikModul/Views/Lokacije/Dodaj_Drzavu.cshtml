@@ -1,0 +1,34 @@
+﻿@model Drzava
+@{
+    ViewData["Title"] = "Dodaj_Drzavu";
+}
+
+<h2>Dodaj drzavu</h2>
+
+<p></p>
+<p></p>
+<p></p>
+
+<form asp-action="SnimiDrzavu" method="post">
+
+    <div class="form-group">
+
+        @Html.LabelFor(x => x.Naziv, "Naziv države")
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.TextBoxFor(x => x.Naziv, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-4 text-right">
+                <button class="btn btn-secondary">Snimi</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+

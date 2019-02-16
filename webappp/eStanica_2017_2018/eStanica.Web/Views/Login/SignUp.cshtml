@@ -1,0 +1,95 @@
+﻿@model LoginSignUpViewModel
+
+@{ 
+    List<SelectListItem> Zemlje = ZemljeRegiona.VratiZemlje();
+    ViewData["Title"] = "Sign up";
+    List<SelectListItem> Zanimanj = Zanimanja.VratiZanimanja();
+
+    //if (ViewBag.DisableLayout=="DA")
+    //{
+    //    Layout = null;
+    //}
+}
+
+<div id="signupDiv">
+    <div id="ajaxPoziv" class="container">
+        <div id="before2" class="col-md-0 col-md-offset-3">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="text-center">
+                        <p style="font-size:20px">Sign up at our web application! </p>
+                    </div>
+                    <div class="greske">@Html.ValidationSummary()</div>
+
+
+                    <form asp-controller="Login" asp-action="SignUp2" id="forma1">
+                        <input asp-for="Ime" placeholder="Ime" />
+                        <input asp-for="Prezime" placeholder="Prezime" />
+                        <br />
+
+                        <input asp-for="Username" placeholder="Username" />
+                        <input asp-for="Pw" placeholder="Pw" />
+                        <input asp-for="PonovljeniPw" placeholder="Ponovljeni pw" />
+                        <b>Spol:</b>
+                        @Html.RadioButton("Gender", "Male", new { id = "" })
+                        <!--prvi param name, ustvari je i id , value je drugi parameterar morao sam dodati id="" jer imaju isti id..-->
+                        <span>Male:</span>
+                        @Html.RadioButton("Gender", "Female", new { id = "" })
+                        <span>Female:</span>
+                        <input asp-for="Telefon" placeholder="Telefon" />
+                        <b>Zemlja:</b>
+                        
+                        <select asp-for="OdabranaZemlja" asp-items="@Zemlje"></select>
+                        
+                        <b>Zanimanje:</b>
+                        
+                        <select asp-for="odabranoZanimanje" asp-items="@Zanimanj"></select>
+                        <input asp-for="Email" placeholder="Email" />
+
+                        <b>Datum rodenja</b>
+                        <input asp-for="DatumRodenja" />
+                        <br />
+                        <br />
+                        <input type="submit" id="btn1" class="btn btn-info" value="Sign up!" />
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            var forma = $("#forma1");
+            forma.submit(function (event) {
+                event.preventDefault();
+
+                var datax = $("#forma1").serialize();
+
+                $.ajax({
+                    type: "post",
+                    data: datax,
+                    url: "/Login/SignUp2",
+                    success: function (result) {
+                        $("#signupDiv").html(result);
+
+                    },
+                    error: function () {
+                        alert("hello");
+
+                    }
+
+
+                });
+            });
+
+        });
+
+    </script>
+}
+
+
+

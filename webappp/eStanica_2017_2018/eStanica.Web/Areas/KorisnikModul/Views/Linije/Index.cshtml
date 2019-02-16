@@ -1,0 +1,12 @@
+﻿@model List<Linije>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<ul>
+    <li><p style="font-size:24px;color:white;">Popularne linije</p></li>
+    @foreach (var item in Model)
+    {
+        <li>@item.Naziv</li>
+    }
+</ul>

@@ -1,0 +1,58 @@
+﻿@model LokacijeGradoviVM
+@{
+    ViewData["Title"] = "Gradovi";
+}
+
+<h2> @ViewData["Title"] </h2>
+
+<p></p>
+<p></p>
+<p></p>
+
+<div class="row">
+    <div class="col-4">
+        <form action="/UpravnikModul/Lokacije/Gradovi">
+            @Html.DropDownListFor(x => x.DrzavaId, Model.Drzave, "Odaberite drzavu", new { onchange = "this.form.submit()", @class = "form-control" })
+        </form>
+    </div>
+</div>
+<p></p>
+
+<a class="btn btn-secondary btn-sm" asp-action="Dodaj_Grad" asp-route-drzavaId="@Model.DrzavaId">Dodaj</a>
+
+
+<p></p>
+
+<table class="table">
+    <tr>
+        <th>Naziv grada</th>
+        <th>Akcija</th>
+    </tr>
+    @foreach (var i in Model.Gradovi)
+    {
+        <tr>
+            <td>@i.Naziv</td>
+            <td>
+                <a asp-controller="Lokacije" asp-action="Uredi_Grad" asp-route-Id="@i.Id" class="btn  btn-outline-secondary">Uredi</a>
+                <button id="brisiButton" class="btn btn-outline-danger" onclick="brisiGrad(@i.Id, '@i.Naziv')">Izbriši</button>
+            </td>
+        </tr>
+    }
+</table>
+
+<!-- Brisanje grada popup -->
+<div class="modal fade" id="gradoviModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Brisanje grada</h5>
+            </div>
+            <div class="modal-body">Jeste li sigurni da se želite izbrisati grad "<i id="imeGrada"></i>"?</div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Ne</button>
+                <a class="btn btn-outline-danger" id="gradId" ajax-poziv="da" ajax-rezultat="ajaxDiv">Da</a>
+            </div>
+        </div>
+    </div>
+</div>
+

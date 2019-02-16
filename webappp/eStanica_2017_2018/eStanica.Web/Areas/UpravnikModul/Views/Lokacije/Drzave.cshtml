@@ -1,0 +1,58 @@
+﻿@model List<Drzava>
+@{
+    ViewData["Title"] = "Drzave";
+}
+
+<h2>Drzave</h2>
+<p></p>
+<a asp-action="Dodaj_Drzavu" class="btn btn-secondary btn-sm">Dodaj</a>
+
+<p></p>
+<p></p>
+<p></p>
+
+<div id="confirmBox">
+    <div class="message"></div>
+    <button class="yes">Da</button>
+    <button class="no">Ne</button>
+</div>
+
+<table class="table">
+
+    <tr>
+        <th>Naziv</th>
+        <th width="250">Akcija</th>
+
+    </tr>
+    @*window.location = '/Lokacije/IzbrisiDrzavu/@x.Id';*@
+    @foreach (var x in Model)
+    {
+        <tr>
+            <td>@x.Naziv</td>
+            <td>
+                <a class="btn btn-outline-primary" asp-action="Gradovi" asp-route-drzavaId="@x.Id">Gradovi</a>
+                <a class="btn btn-outline-secondary" asp-action="Uredi_Drzavu" asp-route-id="@x.Id">Uredi</a>
+                <button id="brisiButton" class="btn btn-outline-danger" onclick="brisiDrzavu(@x.Id, '@x.Naziv')">Izbriši</button>
+            </td>
+
+        </tr>
+    }
+</table>
+
+<p></p>
+
+<!-- Brisanje drzave popup -->
+<div class="modal fade" id="drzaveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Brisanje države</h5>
+            </div>
+            <div class="modal-body">Jeste li sigurni da se želite izbrisati državu "<i id="imeDrzave"></i>"?  </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Ne</button>
+                <a class="btn btn-outline-danger" id="drzavaId" ajax-poziv="da" ajax-rezultat="ajaxDiv">Da</a>
+            </div>
+        </div>
+    </div>
+</div>

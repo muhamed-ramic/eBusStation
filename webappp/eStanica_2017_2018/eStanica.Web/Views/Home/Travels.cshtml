@@ -1,0 +1,124 @@
+﻿@model List<HomeTravelsPrevozniciVM>
+@{
+    ViewData["Title"] = "Travels";
+}
+
+<style>
+    body {
+        background-image: url('../images/TravellingTo_0018_shutterstock_361517306.jpg-1024x683.jpg');
+    }
+</style>
+<div class="container" id="ajaxNoviPrevoznik">
+    <h1 id="lorem" class="bijelo">::Putujte sa nama::</h1>
+    <marquee class="bijelo" style="font-size:24px">Za promjenu prevoznika kliknite na jednog od prevoznika, za promjenu karte kliknite na jednu od opcija karata. </marquee>
+    <br />
+    <div class="col-md-1 oboji" id="ubaciPrevoznike"><p></p></div>
+    <div class="col-md-offset-1 col-md-10 ">
+       <p></p>
+        @foreach (var item in Model)
+        {
+            foreach (var x in item.podaci)
+            {
+                var panelId = "panel" + x.LinijaId;
+                var elementId = "n" + x.LinijaId;
+                <button class="accordion">Linija @x.NazivLinije </button>
+                <div class="panel" id="@panelId">
+                    <div class="col-md-4 col-md-offset-0">
+                        <i>Podaci o liniji</i>
+                        <p>::Prevoznik:: <b>@x.Prevoznik</b> </p>
+                        <p>::Vrijeme polaska::<b>@x.VrijemePolaska h</b></p>
+                        @*<p>::Broj Gradova kroz koje prolazi:: <b>@x.BrojGradovaKrozKojeProlazi</b></p>*@
+                        <p>::Da li ima drugu rutu:: <b>@(x.DaLiImaDruguRutu ? "Da" : "Ne")</b> </p>
+                        <p>::Tip linije::<b>@x.TipLinije</b></p>
+                    </div>
+
+                    <div class="col-md-4 col-md-offset-0">
+                        <h3><i>TIP KARTE::</i></h3><span onclick="Poziv(this,@x.LinijaId)" class="spanStil oboji">Obicna</span> <br /><span class="spanStil oboji" onclick="Poziv(this,@x.LinijaId)">Studentska</span><br />
+                    </div> 
+                    
+                    <div id="@elementId"></div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    function Poziv(poziv, linijaId) {
+
+        //Css for clicked card type
+        var sviTipoviKarta = $(".spanStil2").map(function () {
+                this.className = "spanStil";
+        });
+        $.ajax({
+            type: "get",
+            url: "/Home/Travels?tipKarte=" + poziv.innerHTML + "&" + "linijaId=" + linijaId,
+            success: function (data) {
+                $("#n" + linijaId).html(data);
+            }
+        });
+        //Add class for active card type
+        poziv.className = "spanStil2";
+    }
+
+    //Hide popular traveleres
+    $(document).ready(function () {
+        $("#prevozniciAjax").hide();
+        $("#prevozniciMain").hide();
+        $("#LinijeMain").hide();
+        $("#linijeAjax").hide();
+
+        //Hide footer
+        var footer = $("#myFooter");
+        if (footer != null) {
+            var style = { display: "none" };
+            footer.css(style);
+        }
+        $.ajax({
+            type: "get",
+            url: "/KorisnikModul/Prevoznici/Index",
+            success: function (data) {
+                $("#ubaciPrevoznike").html(data);
+
+                //Change travel bus type
+                var prevoznici = document.getElementById("ubaciPrevoznike");
+                var listItems = prevoznici.getElementsByTagName("li");
+                var Id = "";
+
+                for (var i = 0; i < listItems.length; i++) {
+                    listItems[i].addEventListener("click", function () {
+                        var Id = this.attributes.getNamedItem("id").value;
+                        $.ajax({
+                            type: "get",
+                            url: "/Home/Travels?prevoznikId=" + Id,
+                            success: function (data) {
+                                $("#ajaxNoviPrevoznik").html(data);
+                            }
+                        });
+                    });
+                }
+            }
+
+        });
+        //Make accordion with lines
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+
+    });
+
+
+
+</script>
+

@@ -1,0 +1,54 @@
+﻿@model List<Prevoznik>
+@{
+    ViewData["Title"] = "Prevoznici";
+}
+
+<h2>Prevoznici</h2>
+<p></p>
+<a asp-action="Dodaj" class="btn btn-secondary btn-sm">Dodaj</a>
+
+<p></p>
+<p></p>
+<p></p>
+
+<table class="table">
+
+    <tr>
+        <th>Naziv</th>
+        <th>Kontakt tel.</th>
+        <th>Web</th>
+        <th width="250">Akcija</th>
+
+    </tr>
+    @foreach (var x in Model)
+    {
+        <tr>
+            <td>@x.Naziv</td>
+            <td>@x.KontaktTelefon</td>
+            <td>@x.webStranica</td>
+            <td>
+                <a class="btn btn-outline-secondary" asp-action="Uredi" asp-route-id="@x.Id">Uredi</a>
+                <button id="brisiButton" class="btn btn-outline-danger" onclick="brisiPrevoznika(@x.Id, '@x.Naziv')">Izbriši</button>
+            </td>
+
+        </tr>
+    }
+</table>
+
+<p></p>
+
+<!-- Brisanje drzave popup -->
+<div class="modal fade" id="prevozniciModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Brisanje prevoznika</h5>
+            </div>
+            <div class="modal-body">Jeste li sigurni da se želite izbrisati prevoznika "<i id="imePrevoznika"></i>"?  </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Ne</button>
+                <a class="btn btn-outline-danger" id="prevoznikId" ajax-poziv="da" ajax-rezultat="ajaxDiv">Da</a>
+            </div>
+        </div>
+    </div>
+</div>

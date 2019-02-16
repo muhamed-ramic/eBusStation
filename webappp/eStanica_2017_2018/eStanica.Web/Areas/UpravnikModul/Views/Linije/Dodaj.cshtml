@@ -1,0 +1,86 @@
+﻿@model LinijeDodajVM
+@{
+    ViewData["Title"] = "Dodaj";
+}
+
+<h2>Dodaj liniju</h2>
+
+<p></p>
+<p></p>
+<p></p>
+
+<form action="/UpravnikModul/Linije/Dodaj">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.Polazak, "Država polaska")
+                @Html.DropDownListFor(x => x.dpId, Model.DrzaveP, "Odaberite državu polaska", new { onchange = "this.form.submit()", @class = "form-control", })
+            </div>
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.Polazak, "Država dolaska")
+                @Html.DropDownListFor(x => x.ddId, Model.DrzaveD, "Odaberite državu dolaska", new { onchange = "this.form.submit()", @class = "form-control" })
+            </div>
+        </div>
+    </div>
+</form>
+
+<form asp-action="Snimi" method="post">   
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    @Html.LabelFor(x => x.Polazak, "Grad polaska")
+                    @Html.DropDownListFor(x => x.Polazak, Model.Polasci, "Odaberite lokaciju polaska", new { @class = "form-control" })
+                </div>
+
+                <div class="col-6 col-sm-6">
+                    @Html.LabelFor(x => x.Destinacija, "Grad destinacija")
+                    @Html.DropDownListFor(x => x.Destinacija, Model.Destinacije, "Odaberite lokaciju destinacije", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>    
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.Prevoznik, "Prevoznik")
+                @Html.DropDownListFor(x => x.Prevoznik, Model.Prevoznici, "Odaberite prevoznika", new { @class = "form-control" })
+            </div>
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.RedniBr, "Redni br. linije")
+                @Html.TextBoxFor(x => x.RedniBr, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.Tip, "Tip linije")
+                @Html.TextBoxFor(x => x.Tip, new { @class = "form-control" })
+            </div>
+
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.VrijemePolaska, "Vrijeme polaska")
+                <input type="time" asp-for="VrijemePolaska" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-6 col-sm-6"></div>
+            <div class="col-sm-6 text-right">
+                <button class="btn btn-secondary">Snimi</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+

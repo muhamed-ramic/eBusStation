@@ -1,0 +1,150 @@
+﻿@using eStanica.Web.Helper
+
+@{
+    Korisnik k = Context.GetLogiraniKorisnik();
+    @inject ApplicationContext Db
+
+    List<Transakcija> transkacije;
+    if (k != null)
+    {
+        transkacije = Db.Transakcije.Where(x => x.KlijentiId == k.Id).ToList();
+    }
+    else {
+        transkacije = new List<Transakcija>();
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>eStanica - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/MyCSS.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+
+
+
+</head>
+<body>
+    <div class="container" id="div1">
+        <ul id="ul1">
+            @if (k == null)
+            {
+                <li class="li2"><a asp-controller="Login" asp-action="Index"><i class="fa fa-level-up" style="font-size:24px"></i> Log in</a></li>
+                <li class="li2"><a asp-controller="Login" asp-action="SignUp"><i class="fa" style="font-size:24px">&#xf090;</i> Sign up</a></li>
+            }
+
+
+            <li id="li1">
+                @*<b class="logo">eStanica.com</b>*@
+                <a class="logo" style="padding:inherit" asp-controller="Home" asp-action="Index" asp-area=""> <img src="~/images/eStanicalogo.png" height="55" /> </a>
+            </li>
+
+
+            <li><a asp-controller="Home" asp-action="Index" asp-area=""><i class="fa fa-home" style="font-size:24px"></i> Pocetna</a></li>
+            @if (k != null)
+            {
+                if (k.Discriminator == "Klijenti")
+                {
+                    <li><a asp-controller="Home" asp-action="Travels" asp-area=""><i class="fa fa-bus" style="font-size:24px"></i> Ponude</a></li>
+                    <li><a asp-controller="Home" asp-action="Search" asp-area=""><i class="fa fa-search" style="font-size:24px"></i>Pretraga</a></li>
+                    
+                    @if (transkacije.Count > 0)
+                    {
+                        <li><a asp-controller="Rezervacije" asp-action="VratiRezervacijeTrenutnogKorisnika" asp-area="KorisnikModul"><i class="fa fa-list-alt" style="font-size:24px"></i>Moje rezervacije</a></li>
+                        <li><a asp-controller="Recenzije" asp-action="Ocijeni" asp-area="KorisnikModul"><i class="fa fa-flag" style="font-size:24px"></i>Ocijeni putovanje </a></li>
+                    }
+                }
+                else
+                {
+                    <li><i class="fa fa-search" style="font-size:24px"></i><a asp-controller="Home" asp-area="" asp-action="Search">Pretraga</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" asp-area="UpravnikModul"><i class="fa fa-edit" style="font-size:24px"></i> Administratorski panel</a></li>
+
+                }
+                <li class="li2"><i class="glyphicon glyphicon-user"></i><a asp-controller="Login" asp-action="LogOut" asp-area="">Log out - @k.Ime @k.Prezime</a></li>
+            }
+
+
+            @*else
+        {
+            <li>
+                <div id="login">
+            <li style="float:right;position:relative;left:25px"><a asp-controller="Login" asp-action="Index"><i class="fa fa-level-up" style="font-size:24px"></i> Log in</a></li>
+            <li style="float:right;position:relative;left:45px"><a asp-controller="Login" asp-action="SignUp"><i class="fa" style="font-size:24px">&#xf090;</i> Sign up</a></li>
+               </div>
+            </li>
+        }*@
+        </ul>
+    </div>
+    <div class="container">
+        <div class="prevozniciDiv">
+            <div class="row oboji" id="prevozniciMain">
+                <div class="col-md-5 col-md-offset-1 ">
+                    <div id="prevozniciAjax">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="linijeDiv">
+            <div class="row oboji" id="LinijeMain">
+                <div class="col-md-0 col-md-offset-0 text-center">
+                    <div id="linijeAjax">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <div class="footer" id="myFooter">
+        <div class="text-center">
+            <p></p>
+            <p>Copyright &copy; 2017-2020 eStanica web app. All rights reserved</p>
+            <p class="kontakt">KONTAKT</p>
+            <p>Cassiopeia d.o.o., Sarajevo, BiH</p>
+            <p>Adresa: Trg Alije Izetbegovica 1</p>
+        </div>
+
+
+    </div>
+    <script src="~/js/user.js"></script>
+
+
+    @RenderSection("Scripts", required: false)
+    <script>
+        $(document).ready(function () {
+
+            $.ajax({
+                type: "get",
+                url: "/KorisnikModul/Prevoznici/Index",
+                success: function (data) {
+                    $("#prevozniciAjax").html(data);
+                }
+
+            });
+            $.ajax({
+                type: "get",
+                url: "/KorisnikModul/Linije/Index",
+                success: function (data) {
+                    $("#linijeAjax").html(data);
+
+                }
+
+            });
+
+        });
+
+    </script>
+</body>
+</html>
+

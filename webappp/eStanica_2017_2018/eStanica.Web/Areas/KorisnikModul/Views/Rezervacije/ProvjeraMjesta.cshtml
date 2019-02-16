@@ -1,0 +1,126 @@
+﻿@model RezervacijeProvjeraMjestaVM
+@{
+    ViewData["Title"] = "ProvjeraMjesta";
+    List<int> svaMjestaBusa = new List<int>();
+    for (int i = 0; i < Model.UkupanBrojMjestaAutobusa; i++)
+    {
+        svaMjestaBusa.Add(i);
+    }
+}
+
+<div style="margin-top:120px;margin-left:120px;color:white;border-bottom:2px dashed steelblue" id="SjedistaDiv">
+    <h2 class="bijelo">Odaberite sjediste/a : <span>(X)-zauzeto mjesto vec od prije, (DA) - vase odabrano mjesto</span></h2> 
+    <div id="left"><h3>LIJEVA STRANA BUSA</h3></div>
+    <div id="right"><h3>DESNA STRANA BUSA</h3></div>
+    <br />
+    <div class="text-center">
+        <a class="btn btn-success" onclick="Pokaz()"><i style="font-size:24px" class="fa fa-money" ></i>Rezervisi</a>
+    </div>
+</div>
+
+<script>
+    if(!nizCekiranihBrojeva)
+    var nizCekiranihBrojeva = [];
+
+    function Pokaz() {
+        var jsonObject = {
+            "Mjesta": nizCekiranihBrojeva
+        }; 
+        if (nizCekiranihBrojeva.length == 0) {
+            alert("Niste odabrali nijedno mjesto");
+            location.reload();
+        }
+        //Sending reserved places in bus to controller
+        $.ajax({
+            type: "post",
+            url: "/KorisnikModul/Rezervacije/PrikazFormeZaPlacanje",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(jsonObject),
+            success: function (data) {
+                $("#SjedistaDiv").html(data);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#myFooter").hide();
+        $("#prevozniciAjax").hide();
+        $("#prevozniciMain").hide();
+        $("#LinijeMain").hide();
+        $("#linijeAjax").hide();
+    });
+    @for (int i = 0; i < Model.UkupanBrojMjestaAutobusa; i++)
+    {
+        <text>
+       //Regular node available place in bus
+       var node = document.createElement("span");
+      var to = document.createTextNode(@i);
+      node.className = "templateZaMjesta";
+      node.id = "n"+@i;
+       node.appendChild(to);
+
+       //Occupied place in bus
+       var xNode = document.createElement("span");
+       var toXNode = document.createTextNode("X");
+       toXNode.className = "templateZaMjesta";
+       xNode.appendChild(toXNode);
+        </text>
+
+      
+
+        if (i%2==0)
+        {
+            <text>
+            $("#left").append(node);
+            </text>
+        }
+        else if(i%2!=0 )
+        {
+            <text>
+            $("#right").append(node);
+             </text>
+        }
+    }
+    
+    //Mark occuppied place by X
+    @for (int j = 0; j < Model.ZauzetaMjesta.Count; j++)
+    {
+        if (svaMjestaBusa.Contains(Model.ZauzetaMjesta[j]))
+        {
+            var indeksOf = svaMjestaBusa.IndexOf(Model.ZauzetaMjesta[j]);
+            <text>
+    $("#n" + @indeksOf).html("X");
+            </text>
+        }
+    }
+
+    //On click left side of bus , make it occupied
+    var leftSide = document.getElementById("left");
+    var innerLeftSide = leftSide.getElementsByClassName("templateZaMjesta");
+    for (var i = 0; i < innerLeftSide.length; i++) {
+        innerLeftSide[i].addEventListener("click", function () {
+            if (this.innerHTML == "X") {
+                alert("Mesto je vec zauzeto");
+                location.reload();
+            }
+            var prosliBroj = this.innerHTML;
+            nizCekiranihBrojeva.push(prosliBroj);
+           this.innerHTML = "DA";
+        });
+    }
+
+    //On click right side of bus , make it occupied
+    var rightSide = document.getElementById("right");
+    var innerRightSide = rightSide.getElementsByClassName("templateZaMjesta");
+    for (var i = 0; i < innerRightSide.length; i++) {
+        innerRightSide[i].addEventListener("click", function () {
+            if (this.innerHTML == "X") {
+                alert("Mesto je vec zauzeto");
+                location.reload();
+            }
+            var prosliBroj = this.innerHTML;
+            nizCekiranihBrojeva.push(prosliBroj);
+            this.innerHTML = "DA";
+        });
+    }
+</script>

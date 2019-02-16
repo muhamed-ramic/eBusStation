@@ -1,0 +1,132 @@
+﻿@model RezervacijePrikazFormePlacanjeVM
+@{
+    ViewData["Title"] = "PrikazFormeZaPlacanje";
+    @inject IHttpContextAccessor HttpContextAccessor
+    Layout = null;
+}
+<style>
+    body {
+        overflow-y: scroll;
+    }
+</style>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery/toastr.min.js"></script>
+<link rel="stylesheet" href="~/lib/jquery/toastr.min.css" />
+
+<h2 class="bijelo">Forma za placanje - kupujte preko nas :: vasa eStanica.com</h2>
+<form asp-action="DodajRezervaciju" asp-controller="Rezervacije" id="payForm">
+    <h4>Vasa odabrana ponuda :: <em>@Model.PonudaOdabrana.Linije.Polazak.Naziv - @Model.PonudaOdabrana.Grad.Naziv</em></h4>
+    <h4>
+        Vasa odabrana mjesta su : @foreach (var item in Model.MjestaOdabrana)
+        {
+            <span><em>@item ,</em></span>
+        }
+    </h4>
+    <div style="float:right">
+        @if (Model.PostojiPopustNaLiniji)
+        {
+            @if (Model.IstekaoDatumPopusta)
+            {
+                <div id="showCode" style="display:normal">
+                    <h5><em class="bijelo">Posto na ovoj ponudi postoji popust mozete generisati kod za popust - kod dobivate na email </em></h5>
+                    <a class="btn btn-success" onclick="Generisi()"><i class="fa fa-lightbulb" style="font-size:24px"></i>Generisi</a>
+                </div>
+                <div id="afterCode" style="display:none">
+                    <input name="code" class="form-control" id="codeId" placeholder="Unesite generisani kod" />
+                    <button id="codeSubmit" class="btn btn-success">Provjeri kod</button>
+                </div>
+            }
+        }
+    </div>
+    @for (int i = 0; i < Model.ProsliModel.Mjesta.Count; i++)
+    {
+        <input asp-for="ProsliModel.Mjesta[i]" hidden="hidden" />
+    }
+    <input asp-for="UkupnaCijena" hidden="hidden" />
+    <input asp-for="DatumRezervacije" hidden="hidden" />
+
+    <h4>Kolicina karata kupljenih :: <em>@Model.KolicinaKarata</em></h4>
+    <h4>Ukupna cijena za platiti u KM :: <em id="fullPrice">@Model.UkupnaCijena KM</em></h4>
+
+    <h4 style="display:none" id="headingForShowPrice">Ukupna cijena za platiti u KM sa popustom :: <em id="showPrice"></em></h4>
+
+    <h4>Tip karte :: <em>@Model.TipKarte</em></h4>
+    <h4>Datum rezervacije :: <em>@Model.DatumRezervacije.ToShortDateString()</em> </h4>
+    <div class="form-group">
+        <span>Banka:</span>
+        <select class="form-control" asp-for="OdabranaBankaId" asp-items="@Model.Banke"></select>
+        <br />
+        <span>Tip karte za placanje</span>
+        <select asp-for="OdabranaKartaId" asp-items="@Model.Karte" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <span>Broj kreditne kartice</span>
+        <input asp-for="BrojKreditneKartice" placeholder="Unesite broj karte" class="form-control" required="required" />
+    </div>
+    <div class="form-group">
+        <a class="btn btn-block" id="paySubmit">
+            <i class="fa fa-money" style="font-size:24px">Plati</i>
+        </a>
+    </div>
+</form>
+
+<script>
+    
+    $("#paySubmit").click(function () {
+        //If user sent all data
+        var forma = $("#payForm");
+        var podaci = forma.serialize();
+
+        $.ajax({
+            type: "post",
+            url: "/KorisnikModul/Rezervacije/DodajRezervaciju",
+            data: podaci,
+            success: function (data) {
+                var podaci = data;
+
+                if (podaci != "niste unijeli kreditnu karticu") {
+                    toastr.success(data);
+                    location.href = "/KorisnikModul/Rezervacije/VratiRezervacijeTrenutnogKorisnika";
+                }
+                else {
+                    toastr.error(data);
+                }
+            }
+        });
+    });
+
+    //Function to generate coude cupon
+    function Generisi() {
+        $.ajax({
+            type: "get",
+            url: "/KorisnikModul/Rezervacije/GenerisiKod",
+            success: function (data) {
+                toastr.success(data);
+                $("#showCode").hide();
+                $("#afterCode").show();
+            }
+        });
+    }
+    //Funtion to validate code coupon
+    $("#codeSubmit").click(function () {
+        var code = $("#codeId");
+        $.ajax({
+            type: "get",
+            url: "/KorisnikModul/Rezervacije/ProvjeriValidnostKoda?code=" + code.val(),
+            success: function (data) {
+                if (data != "Nevalidan kod")
+                {
+                    toastr.success("Kod je ispravan, imate pravo popusta" + data + "%");
+                    var priceWithoutDiscount = parseInt($("#fullPrice").html());
+                    var priceWithDiscount = priceWithoutDiscount - priceWithoutDiscount / (100 / parseInt(data));
+                    $("#afterCode").hide();
+                    $("#showPrice").html(priceWithDiscount)
+                    $("#headingForShowPrice").show();
+                }
+                else
+                    toastr.error(data);
+            }
+        });
+    });
+</script>

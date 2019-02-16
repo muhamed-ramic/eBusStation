@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "Confirm";
+    string isValid = ViewBag.IsValid;
+}
+
+@if (string.IsNullOrEmpty(isValid))
+{
+
+    <div class="alert alert-danger" id="previous" style="margin:115px">
+        <b>Confirm your account</b>
+        <input type="submit" class="btn btn-warning" value="Confirm" onclick="Verified()" />
+
+    </div>
+    <div class="alert alert-success" id="after" style="display:none">
+        <b><span class="glyphicon glyphicon-ok"></span>Your account is active now</b>
+    </div>
+}
+else
+{
+    <h3>Vi ste vec validirani </h3>
+}
+
+<script>
+    function Verified() {
+
+        $.ajax({
+            type: "post",
+            url: "/Login/RegisterConfirm",
+            data: { 'regId':@ViewBag.regId},
+            success: function (response) {
+                $("#previous").hide();
+                $("#after").show();
+                location.href = "/Home/Index";
+            }
+
+        });
+
+    }
+</script>

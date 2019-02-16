@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewData["Title"] = "VerifikacijaStatusa";
+    int Korisid = ViewBag.KorisnikIdd;
+}
+
+<div style="position:relative;left:15%" class="bijelo">
+<h2>VerifikacijaStatusa- postavljanje slike o dokazu statusa</h2>
+<form asp-action="VerifikacijaStatusa" asp-controller="Login" enctype="multipart/form-data">
+        <b>Slika o dokazu</b>
+        <input type="file" name="pic">
+        <input asp-for="@Korisid" hidden="hidden" name="Korisid"/>
+        <br />
+        <input type="submit" value="Snimi" />
+</form>
+</div>
+

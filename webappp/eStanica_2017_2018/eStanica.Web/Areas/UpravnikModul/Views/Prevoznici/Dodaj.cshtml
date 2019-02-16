@@ -1,0 +1,54 @@
+﻿@model Prevoznik
+@{
+    ViewData["Title"] = "Dodaj";
+}
+
+<h2>Dodaj prevoznika</h2>
+
+<p></p>
+<p></p>
+<p></p>
+
+<form asp-action="Snimi" method="post">
+
+    <div class="form-group">
+
+        @Html.LabelFor(x => x.Naziv, "Naziv prevoznika")
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.TextBoxFor(x => x.Naziv, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        @Html.LabelFor(x => x.KontaktTelefon, "Kontak tel.")
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.TextBoxFor(x => x.KontaktTelefon, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        @Html.LabelFor(x => x.webStranica, "Web stranica")
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.TextBoxFor(x => x.webStranica, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-4 text-right">
+                <button class="btn btn-secondary">Snimi</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+

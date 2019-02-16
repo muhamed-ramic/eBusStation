@@ -1,0 +1,61 @@
+﻿@model List<Linije>
+    @{
+        ViewData["Title"] = "Linije";
+    }
+
+    <h2>Linije</h2>
+    <p></p>
+    <a asp-action="Dodaj" class="btn btn-secondary btn-sm">Dodaj</a>
+
+    <p></p>
+    <p></p>
+    <p></p>
+
+    <table class="table">
+
+        <tr>
+            <th width="300">Naziv</th>
+            <th>Tip</th>
+            <th>Redni broj</th>
+            <th>Polazak</th>
+            <th>Destinacija</th>
+            <th>Prevoznik</th>
+            <th>Vrijeme polaska</th>
+            <th width="250">Akcija</th>
+
+        </tr>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.Polazak.Naziv - @x.Destinacija.Naziv</td>
+                <td>@x.TipLinije</td>
+                <td>@x.RedniBrojLinije</td>
+                <td>@x.Polazak.Naziv</td>
+                <td>@x.Destinacija.Naziv</td>
+                <td>@x.Prevoznik.Naziv</td>
+                <td>@x.vrijemePolaska</td>
+                <td>
+                    <a class="btn btn-outline-secondary" asp-action="Uredi" asp-route-id="@x.Id">Uredi</a>
+                    <button id="brisiButton" class="btn btn-outline-danger" onclick="brisiLiniju(@x.Id, '@x.Naziv')">Izbriši</button>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <p></p>
+
+    <!-- Brisanje drzave popup -->
+    <div class="modal fade" id="linijeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Brisanje linije</h5>
+                </div>
+                <div class="modal-body">Jeste li sigurni da se želite izbrisati liniju "<i id="imeLinije"></i>"?  </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Ne</button>
+                    <a class="btn btn-outline-danger" id="linijaId" ajax-poziv="da" ajax-rezultat="ajaxDiv">Da</a>
+                </div>
+            </div>
+        </div>
+    </div>

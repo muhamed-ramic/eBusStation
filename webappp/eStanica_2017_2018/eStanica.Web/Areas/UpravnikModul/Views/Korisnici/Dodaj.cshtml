@@ -1,0 +1,127 @@
+﻿@using eStanica.Web.Helper;
+@model ProfilVM
+@{
+    ViewData["Title"] = "Profil";
+}
+
+<h2>Dodaj korisnika</h2>
+
+<p></p>
+<p></p>
+
+
+<form asp-action="SnimiProfil">
+    @Html.HiddenFor(x => x.UlogaId)
+
+    <div class="form-group">
+
+        @Html.LabelFor(x => x.Spol, "Spol", new { @class = "profile-label" })
+        <div class="row">
+            <label class="px-3">@Html.RadioButtonFor(x => x.Spol, 'm') Muški</label>
+            <label>@Html.RadioButtonFor(x => x.Spol, 'z') Ženski</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <div class="row">
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.Ime, "Ime *", new { @class = "profile-label" })
+                @Html.TextBoxFor(x => x.Ime, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Ime)
+
+            </div>
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.Prezime, "Prezime *", new { @class = "profile-label" })
+                @Html.TextBoxFor(x => x.Prezime, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Prezime)
+
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <div class="row">
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.Telefon, "Broj telefona", new { @class = "profile-label" })
+                @Html.TextBoxFor(x => x.Telefon, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Telefon)
+
+            </div>
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.datumRodjenja, "Datum rođenja *", new { @class = "profile-label" })
+                <input type="date" asp-for="datumRodjenja" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        @Html.LabelFor(x => x.Adresa, "Adresa", new { @class = "profile-label" })
+        @Html.TextBoxFor(x => x.Adresa, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+
+        <div class="row">
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.ZemljaPorijekla, "Država", new { @class = "profile-label" })
+                @Html.TextBoxFor(x => x.ZemljaPorijekla, new { @class = "form-control" })
+
+            </div>
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.Grad, "Grad", new { @class = "profile-label" })
+                @Html.TextBoxFor(x => x.Grad, new { @class = "form-control" })
+
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.Email, "Email adresa", new { @class = "profile-label" })
+                @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Email)
+            </div>
+            <div class="col-6 col-sm-6">
+                @Html.LabelFor(x => x.username, "Korisničko ime *", new { @class = "profile-label" })
+                @Html.TextBoxFor(x => x.username, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.username)
+            </div>
+        </div>
+    </div>
+
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    @Html.LabelFor(x => x.newpassword, "Nova lozinka", new { @class = "profile-label" })
+                    @Html.PasswordFor(x => x.newpassword, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.newpassword)
+
+                </div>
+                <div class="col-6 col-sm-6">
+                    @Html.LabelFor(x => x.passwordConfirm, "Potvrda lozinke", new { @class = "profile-label" })
+                    @Html.PasswordFor(x => x.passwordConfirm, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.passwordConfirm)
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+
+            <div class="row">
+                <div class="col-12 col-sm-12 text-right">
+
+                    <button class="btn btn-outline-success">Snimi</button>
+                </div>
+            </div>
+        </div>
+
+</form>

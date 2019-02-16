@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    string imaKarte = ViewBag.NemaKarte != "" ? ViewBag.NemaKarte : "";
+}
+
+
+<div class="col-md-offset-2" style="margin-top:25px">
+    <h2 class="bijelo">Provjera slobodnih mjesta - odredjenog datuma</h2>
+    @if (string.IsNullOrEmpty(imaKarte))
+    {
+        <form asp-action="ProvjeraMjesta" asp-controller="Rezervacije" method="post" id="formaZaProvjeru">
+            <div class="form-group">
+                <span style="font-size:19px"><b>Unesite datum rezervacije putovanja</b></span>
+                <input type="date" id="pickerDate" required="required" name="Datum" />
+                <input type="hidden" value="@ViewBag.PonudId" name="PonudId" />
+                <input type="hidden" value="@ViewBag.TipKarte" name="TipKarte" />
+                <input type="submit" value="Provjeri slobodna mjesta u busu" class="btn btn-success" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <form asp-action="ProvjeraMjesta" asp-controller="Rezervacije">
+            <span style="font-size:19px"><b>Unesite datum rezervacije putovanja</b></span>
+            <input type="date" id="pickerDate" required="required" name="Datum" />
+            <input type="hidden" value="@ViewBag.PonudId" name="PonudId" />
+            <br />
+            <span style="font-size:19px"><b>Unesite tip karte</b></span>
+
+            <select name="TipKarte">
+                <option value="Studentska">Studentska</option>
+                <option value="Obicna">Obicna</option>
+            </select>
+            <br />
+            <input type="submit" value="Provjeri slobodna mjesta u busu" class="btn btn-success" style="margin:20px" />
+        </form>
+    }
+</div>
+<script>
+
+</script>
+

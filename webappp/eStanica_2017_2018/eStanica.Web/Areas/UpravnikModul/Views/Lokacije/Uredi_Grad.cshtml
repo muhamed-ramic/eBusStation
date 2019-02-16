@@ -1,0 +1,33 @@
+﻿@model Grad
+@{
+    ViewData["Title"] = "Uredi_Drzavu";
+}
+
+<h2>Uredi grad</h2>
+
+<p></p>
+<p></p>
+<p></p>
+
+<form asp-action="SnimiGrad_" method="post">
+
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="form-group">
+
+        @Html.LabelFor(x => x.Naziv, "Naziv grada")
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.TextBoxFor(x => x.Naziv, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-4 text-right">
+                <button class="btn btn-secondary">Snimi</button>
+            </div>
+        </div>
+    </div>
+</form>

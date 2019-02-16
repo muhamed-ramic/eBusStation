@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewData["Title"] = "AfterLogin";
+    string username = Context.Session.GetString("Username");
+}
+
+<div class="row">
+    <div class="col-md-5 col-md-offset-6">
+        <h2>AfterLogin</h2>
+        <h3>welcome @username</h3>
+    </div>
+</div>

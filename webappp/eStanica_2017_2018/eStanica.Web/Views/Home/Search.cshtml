@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "Search";
+    var greska = ViewBag.Greska;
+}
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-2" style="width:60%;border:4px solid steelblue;margin-top:100px">
+        <form asp-action="Search" asp-controller="Home">
+            <h2 class="bijelo">Pretraga</h2>
+            @if (ViewBag.OnlyTextAllowd != null)
+            {
+                <h3 class="bijelo">@ViewBag.OnlyTextAllowd</h3>
+            }
+            @if (ViewBag.Validacija != null)
+            {
+                <h3 class="bijelo">@ViewBag.Validacija</h3>
+            }
+            <div class="form-group">
+                <input class="form-control" name="Pocetak" placeholder="Pocetna stanica" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="Destinacija" placeholder="Destinacija" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="Prevoznik" placeholder="Prevoznik" />
+            </div>
+            <div class="form-group">
+                <input maxlength="5" size="5" style="width:49%" name="VrijemePolaska" placeholder="Vrijeme kretanje sa pocetne stanice hhmm" />
+                <input maxlength="5" size="5" style="width:49%" name="VrijemeOdlaksa" placeholder="Vrijeme dolaska na destinacijsku stanicu hhmm" />
+            </div>
+            <div class="glyphicon-align-center">
+                <input type="submit" class="btn btn-info btn-social-icon" value="Pretrazi" style="margin-left:225px" />
+            </div>
+        </form>
+    </div>
+</div>
+

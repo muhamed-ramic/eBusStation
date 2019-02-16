@@ -1,0 +1,36 @@
+﻿
+<div id="AjaxRecenzijaDiv">
+    <form asp-action="FormaOcijeni" asp-controller="Recenzije" id="FormaZaRecenzije">
+        <div class="form-group">
+            <label>Ocjena:</label>
+            <select name="Ocjena" required="required" class="form-control">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <br />
+            <input type="hidden" value="@ViewBag.TransakcijaId" name="transakcijaId" />
+            <textarea class="form-control" placeholder="Opis recenzije" name="Opis"></textarea>
+            <input type="submit" value="Ocijeni" class="btn btn-secondary" id="OcjenaSubmit" />
+        </div>
+    </form>
+</div>
+
+<script>
+    $("#FormaZaRecenzije").submit(function (event) {
+       event.preventDefault();
+        var forma = $("#FormaZaRecenzije");
+        var podaci = forma.serialize();
+        $.ajax({
+            type: "post",
+            url: "/KorisnikModul/Recenzije/FormaOcijeni",
+            data: podaci,
+            success: function (data) {
+                $("#AjaxRecenzijaDiv").html(data);
+            },
+            error: function () { alert('greska'); }
+        });
+    });
+</script>
